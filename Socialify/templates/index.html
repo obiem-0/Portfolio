@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socialify</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Stash+Regular"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+
+</head>
+
+<style>
+
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Stash Regular', sans-serif;
+    }
+    
+    .container{
+       
+    
+    }
+    
+    .title{
+        color: white !important;
+    }
+    
+    
+    #qr-code{
+        width: 40%;
+    }
+    
+    
+    .baking-tray {
+        background: white;
+        opacity: 0.9;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        text-align: center;
+    
+    }
+    
+    .blur {
+    background: rgba(255, 255, 255, 0.3); // Make sure this color has an opacity of less than 1
+    backdrop-filter: blur(20px); // This be the blur
+    webkit-backdrop-filter: blur(20px); // This be the blur
+    max-height: 100%%;
+    height: 100%;
+    width: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    
+    }
+    
+    .form-floating-group{
+    margin-right: 10px;
+    }
+    
+    .form-floating-group input {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    }
+    
+    .input-field {
+        margin-bottom: 20px;
+    }
+    
+    .shortened-url {
+        margin-top: 40px;
+    font-weight: bold;
+    font-size: 150%;
+    width: 60%;
+    
+    }
+    
+    
+    body .btn{
+        width: 200px;
+        color: white;
+    font-size: 130%;
+    }
+    
+    
+    body .btn,
+    body .btn2,
+    body {
+    
+        background: linear-gradient(-45deg, #ffa63d, #ff3d77, #338aff, #3cf0c5);
+        background-size: 600%;
+        -webkit-animation: anime 16s linear infinite;
+                animation: anime 16s linear infinite;
+    
+    }
+    
+      body .btn,
+      body .btn2, {
+        width: 300px;
+        height: 100px;
+        font-size: 30px;
+        text-align: center;
+        line-height: 100px;
+        color: rgba(255,255,255,0.9);
+        border-radius: 50px;
+      }
+    
+      body .btn2 {
+        position: absolute;
+        margin-top: -70px;
+        z-index: -1;
+        filter: blur(30px);
+        opacity: 0.8;
+       
+      }
+      @-webkit-keyframes anime {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      @keyframes anime {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+</style>
+
+<body> 
+    <div class="blur" >
+        <h2 class="mb-4 title"> Socialfy: Amplify Your Social Presence</h2>
+    <div class="baking-tray">
+        
+
+       
+<p>Socialfy enhances your social media impact by making your social links more user friendly</p>
+
+<div class="input-group mb-3">
+    <div class="form-floating form-floating-group flex-grow-1">
+        <input type="url" class="form-control is-invalid " id="long-url" placeholder="google.com" required>
+            <label for="floatingInputInvalid">https://</label>
+    </div>
+
+    <button class="btn" type="button" onclick="shortenUrl()"> Shorten</button>
+
+  </div>
+   
+
+<div class="row">
+    <div id="qr-code"></div>
+        <div class="shortened-url" id="shortened-url"></div>
+      
+    </div>
+</div>
+
+</div>
+
+<footer> 2023, Made by Obi. Reach out to me on <a href="https://www.linkedin.com/in/obi-emuwa/"> Linkedin </a> | <a href="http://github.com/obiem-0/Portfolio"> Github </a> | <a href="mailto:emuwa.obi@gmail.com"> Email </a>   </footer>
+
+
+    <script>
+
+        
+        function shortenUrl() {
+            var longUrl = $('#long-url').val();
+        
+            if (longUrl.trim() === "") {
+                alert("Please enter a valid URL.");
+                return;
+            }
+        
+            $.ajax({
+                type: 'POST',
+                url: '/shorten',
+                data: { long_url: longUrl },
+                success: function(response) {
+                    var shortenedUrl = response.shortened_url;
+                    var linkElement = $('<a>').attr('href', shortenedUrl).text('http://linkurl.io' + shortenedUrl);
+                    $('#shortened-url').html('Shortened URL: ').append(linkElement);
+
+                    $('#qr-code').html('<img src="qrcodes/' + response.qr_code_url + '" alt="QR Code"/>');
+                },
+                error: function() {
+                    alert('Error occurred while shortening the URL.');
+                }
+            });
+        }
+        
+    </script>
+    
+    
+</body>
+
+</html>

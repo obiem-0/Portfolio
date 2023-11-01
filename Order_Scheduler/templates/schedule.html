@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakery Order Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.32.0/dist/apexcharts.min.css">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .order-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            
+        }
+
+        #orders-container{
+            justify-content: center;
+        }
+
+        .order-card h4 {
+            margin-bottom: 15px;
+        }
+
+        .order-card p {
+            margin: 10px 0;
+        }
+
+        .status_badge{
+            text-align: end;
+        }
+    </style>
+</head>
+
+<body data-schedule='{{ schedule | tojson | safe }}'>
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-md-8 text-start">
+                <h1 class="mb-4">Schedule</h1>
+            </div>
+
+            <div class="col-md-4 text-end">
+                <a href="/" class="btn btn-primary" tabindex="-1" role="button" aria-disabled="true">View Dashboard</a>
+            </div>
+        </div>
+
+        <div class="row" id="chart"></div>
+     
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.32.0/dist/apexcharts.min.js"></script>
+
+
+
+    <!-- Inline JavaScript -->
+ 
+
+<script>
+    $(document).ready(function () {
+        
+        function transformDataForTimeline(orders) {
+            const series = [];
+            const addedSteps = {}; // To track which steps are already added to the series
+    
+            if (orders && Array.isArray(orders)) {
+                orders.forEach((order) => {
+                    order.manufacturing_schedule.forEach((manufacturingData) => {
+                        const itemId = manufacturingData.item_id;
+    
+                        manufacturingData.steps.forEach((step) => {
+                            const startTime = new Date(order.item_start_times[itemId]).getTime();
+                            const endTime = new Date(order.item_finish_times[itemId]).getTime();
+                            //const fillColor = (order.request_delivery_date >= order.latest_delivery) || (order.request_delivery_date = order.latest_delivery) ? '#00e676' : '#ff3d00'; 
+    
+                            if (addedSteps[step.step_name]) {
+
+                               
+                                // If step_name is already added, push new data to the corresponding series
+                                addedSteps[step.step_name].data.push({
+                                    x: (((order.items.find((item) => item.id == itemId)) || {}).name || null).toString(),
+                                    y: [startTime, endTime] //,
+                                   // fillColor: fillColor,
+                                });
+                            } else {
+                                // If step_name is not added, create a new series entry
+                                const stepSeries = {
+                                    name: step.step_name,
+                                    data: [{
+                                        x: (((order.items.find((item) => item.id == itemId)) || {}).name || null).toString(),
+                                        y: [startTime, endTime],
+                                        goals: [
+                                        {
+                                          name: 'Expected',
+                                          value: 70,
+                                          strokeWidth: 5,
+                                          strokeHeight: 10,
+                                          strokeColor: '#775DD0'
+                                        }
+                                      ]
+                                        //fillColor: fillColor,
+                                    }],
+                                };
+                                series.push(stepSeries);
+    
+                                // Add the series to addedSteps for tracking
+                                addedSteps[step.step_name] = stepSeries;
+                            }
+                        });
+                    });
+                });
+            }
+    
+            return series;
+        }
+        
+        // Access the 'schedule' data passed from Flask
+        const ordersData = JSON.parse(document.body.getAttribute('data-schedule') );
+        const timelineSeries = transformDataForTimeline(ordersData);
+
+        // Create the ApexCharts timeline
+        const options = {
+            stroke: {
+                width: 1
+              },
+            legend: {
+                show: true,
+                showForSingleSeries: true,
+                showForNullSeries: true,
+                showForZeroSeries: true,
+                position: 'top',
+                horizontalAlign: 'left', 
+                floating: false,
+                fontSize: '14px',
+                fontFamily: 'Helvetica, Arial',
+                fontWeight: 400,
+                formatter: undefined,
+                inverseOrder: false,
+                width: undefined,
+                height: undefined,
+                tooltipHoverFormatter: undefined,
+                customLegendItems: [],
+                offsetX: 0,
+                offsetY: 0,
+                labels: {
+                    colors: undefined,
+                    useSeriesColors: false
+                 },
+                 
+                 markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 3,
+                   // strokeColor: 'orange',
+                    fillColors:  ['#00E396', '#775DD0'],
+                    radius: 12,
+                    customHTML: undefined,
+                    onClick: undefined,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+         
+                itemMargin: {
+                    horizontal: 5,
+                    vertical: 0
+                },
+                onItemClick: {
+                    toggleDataSeries: true
+                },
+                onItemHover: {
+                    highlightDataSeries: true
+                },
+              },
+            chart: {
+                type: 'rangeBar',
+                height: 350,
+            },
+
+            plotOptions: {
+                bar: { 
+                    horizontal: true
+                },
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function(val, opts) {
+                    const startDateTimestamp = opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex].y[0];
+                    const endDateTimestamp = opts.w.config.series[opts.seriesIndex].data[opts.dataPointIndex].y[1];
+                
+                
+                    const startDate = new Date(startDateTimestamp) //.getTime();
+                    const endDate = new Date(endDateTimestamp)//.getTime();
+                
+                    console.log("Start Date:", startDate);
+                
+                    return new Date(startDateTimestamp);
+
+                },
+                
+                style: {
+                    colors: ['#333']
+                }
+            },
+            
+            
+            xaxis: {
+                type: 'datetime',
+            },
+            fill: {
+                type: 'solid',
+                opacity: 0.6,
+            },
+            series:  timelineSeries,
+        };
+
+        if (timelineSeries && timelineSeries.length > 0) {
+            const timelineChart = new ApexCharts(document.querySelector('#chart'), options);
+            timelineChart.render();
+           
+        } else {
+            // Handle the case when there is no data to display (e.g., show a message)
+            console.log('No data available for the chart.');
+        }
+
+    });
+</script>
+
+
+       <!-- Inline JavaScript -->
+
+</body>
+
+</html>

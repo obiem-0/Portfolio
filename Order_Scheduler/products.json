@@ -1,0 +1,39 @@
+{
+    "products": [
+        {
+            "product_id": 101,
+            "product_name": "Chocolate Chip Cookies",
+            "price": 2.50,
+            "description": "Delicious chocolate chip cookies made with premium ingredients.",
+            "category": "Cookies"
+        },
+        {
+            "product_id": 102,
+            "product_name": "Fudgy Brownies",
+            "price": 3.00,
+            "description": "Rich and fudgy brownies, perfect for chocolate lovers.",
+            "category": "Brownies"
+        },
+        {
+            "product_id": 103,
+            "product_name": "Sourdough Bread",
+            "price": 5.50,
+            "description": "Traditional sourdough bread made with a slow fermentation process.",
+            "category": "Bread"
+        },
+        {
+            "product_id": 104,
+            "product_name": "Blueberry Muffins",
+            "price": 2.75,
+            "description": "Moist and flavorful muffins loaded with blueberries.",
+            "category": "Muffins"
+        },
+        {
+            "product_id": 105,
+            "product_name": "Cinnamon Rolls",
+            "price": 3.50,
+            "description": "Soft and gooey cinnamon rolls topped with cream cheese icing.",
+            "category": "Pastries"
+        }
+    ]
+}

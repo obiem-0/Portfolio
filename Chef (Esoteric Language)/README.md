@@ -1,0 +1,3 @@
+**Holidays are important** - well for my bakery they are. I was brainstorming on ideas to **promote festive desserts, and standout from the overly crowded market** of food vendors. Rarely do I see things that are a combination of desserts and coding. I randomly searched for these words "coding, baking, scripts" and came across an **[esoteric language called Chef](https://esolangs.org/wiki/Chef) - something that combines two of my interests: coding and baking!** Its use of cooking-related terms like "mix" and "stir" to represent programming instructions had me hooked.
+
+I've been able to create a few recipes, but **my end goal is to create some sort of puzzle** (not too difficult) that a select group of **customers could play to win dessert boxes...**

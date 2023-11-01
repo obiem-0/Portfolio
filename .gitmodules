@@ -1,0 +1,6 @@
+[submodule "Ingredients_Tracker"]
+	path = Ingredients_Tracker
+	url = https://github.com/obiem-0/ingredientpricetracker.git
+[submodule "Advent_of_Code"]
+	path = Advent_of_Code
+	url = https://github.com/obiem-0/Advent-of-Code-2022.git

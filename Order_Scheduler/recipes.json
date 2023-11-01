@@ -1,0 +1,97 @@
+{
+    "recipes": [
+        {
+            "recipe_id": 1,
+            "product_id": 101,
+            "product_name": "Cookies",
+            "ingredient_id": 201,
+            "total_duration": 65,
+            "steps": [
+                {
+                    "step_id": 1,
+                    "description": "Mix",
+                    "duration_minutes": 30,
+                    "allow_simultaneous": false
+                },
+                {
+                    "step_id": 2,
+                    "description": "Shape",
+                    "duration_minutes": 20,
+                    "allow_simultaneous": false
+                },
+                {
+                    "step_id": 3,
+                    "description": "Bake",
+                    "duration_minutes": 15,
+                    "allow_simultaneous": true
+                },
+                {
+                    "step_id": 4,
+                    "description": "Cool",
+                    "duration_minutes": 45,
+                    "allow_simultaneous": true
+                }
+            ]
+        },
+        {
+            "recipe_id": 2,
+            "product_name": "Brownies",
+            "product_id": 102,
+            "ingredient_id": 202,
+            "total_duration": 60,
+            "steps": [
+                {
+                    "step_id": 1,
+                    "description": "Mix",
+                    "duration_minutes": 25,
+                    "allow_simultaneous": false
+                },
+                {
+                    "step_id": 2,
+                    "description": "Bake",
+                    "duration_minutes": 35,
+                    "allow_simultaneous": true
+                },
+                {
+                    "step_id": 3,
+                    "description": "Cool",
+                    "duration_minutes": 35,
+                    "allow_simultaneous": true
+                }
+            ]
+        },
+        {
+            "recipe_id": 3,
+            "product_id": 103,
+            "product_name": "Bread",
+            "ingredient_id": 203,
+            "total_duration": 145,
+            "steps": [
+                {
+                    "step_id": 1,
+                    "description": "Mix",
+                    "duration_minutes": 40,
+                    "allow_simultaneous": false
+                },
+                {
+                    "step_id": 2,
+                    "description": "Rise",
+                    "duration_minutes": 60,
+                    "allow_simultaneous": true
+                },
+                {
+                    "step_id": 3,
+                    "description": "Bake",
+                    "duration_minutes": 45,
+                    "allow_simultaneous": true
+                },
+                {
+                    "step_id": 4,
+                    "description": "Cool",
+                    "duration_minutes": 45,
+                    "allow_simultaneous": true
+                }
+            ]
+        }
+    ]
+}
